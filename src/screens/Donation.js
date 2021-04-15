@@ -1,9 +1,10 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import { backgroundStyle } from '../components/Styles'
 
 const Donation = () => {
   return (
-    <View>
+    <View style={styles.backgroundStyle}>
       <Text>Donation</Text>
     </View>
   )
@@ -11,4 +12,6 @@ const Donation = () => {
 
 export default Donation
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  backgroundStyle: { ...backgroundStyle }
+})

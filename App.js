@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native'
-import { SignUp, SignIn, Home } from './src/screens'
+import { SafeAreaView, StatusBar, StyleSheet, View } from 'react-native'
+import { SignUp, SignIn, ForgotPassword, UserDetails } from './src/screens'
 import { NavigationContainer } from '@react-navigation/native'
 import { enableScreens } from 'react-native-screens'
 import { createNativeStackNavigator } from 'react-native-screens/native-stack'
@@ -12,11 +12,12 @@ import firebase from '@react-native-firebase/app'
 import ReduxThunk from 'redux-thunk'
 import Spinner from 'react-native-loading-spinner-overlay'
 import BottomTabs from './src/components/BottomTabs'
+import { navigationRef } from './src/components/RootNavigation'
 
 const firebaseConfig = {
   apiKey: process.env.API_KEY,
   authDomain: process.env.AUTH_DOMAIN,
-  databaseURL: process.env.DATABASE_URL,
+  // databaseURL: process.env.DATABASE_URL,
   projectId: process.env.PROJECT_ID,
   storageBucket: process.env.STORAGE_BUCKET,
   messagingSenderId: process.env.MESSAGING_SENDER_ID,
@@ -60,26 +61,32 @@ const App = () => {
 
   if (!user) {
     return (
-      <SafeAreaView style={styles.backgroundStyle}>
-        <StatusBar barStyle={'light-content'} />
-        <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="SignUp" component={SignUp} />
-            <Stack.Screen name="SignIn" component={SignIn} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </SafeAreaView>
+      <Provider store={createStore(reducers, {}, applyMiddleware(ReduxThunk))}>
+        <SafeAreaView style={styles.backgroundStyle}>
+          <StatusBar barStyle={'light-content'} />
+          <NavigationContainer>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="SignIn" component={SignIn} />
+              <Stack.Screen name="SignUp" component={SignUp} />
+              <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </SafeAreaView>
+      </Provider>
     )
   }
   return (
-    <SafeAreaView style={styles.backgroundStyle}>
-      <StatusBar barStyle={'light-content'} />
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Home" component={BottomTabs} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </SafeAreaView>
+    <Provider store={createStore(reducers, {}, applyMiddleware(ReduxThunk))}>
+      <SafeAreaView style={styles.backgroundStyle}>
+        <StatusBar barStyle={'light-content'} />
+        <NavigationContainer ref={navigationRef}>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Home" component={BottomTabs} />
+            <Stack.Screen name="UserDetails" component={UserDetails} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaView>
+    </Provider>
   )
 }
 

@@ -1,12 +1,22 @@
-import React, { useState } from 'react'
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import React from 'react'
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Alert
+} from 'react-native'
 import welcome from '../assets/images/welcome.png'
 import google from '../assets/images/google.png'
-import { Button, Input } from '../components/common/'
-
+import { Button, Input, Spinner } from '../components/common/'
+import { backgroundStyle } from '../components/Styles'
 import { Divider } from 'react-native-paper'
+import { connect } from 'react-redux'
+import { emailChanged, passwordChanged, resetError } from '../actions'
+import Toast from 'react-native-simple-toast'
 
-export default function Auth({
+const Auth = ({
   title,
   subTitle,
   buttonText,
@@ -14,15 +24,46 @@ export default function Auth({
   actionText,
   navigator,
   onSubmit,
-  onGoogleButtonPress
-}) {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-
+  onGoogleButtonPress,
+  onForgotPasswordPress,
+  emailChanged,
+  email,
+  passwordChanged,
+  password,
+  error,
+  loading,
+  resetError
+}) => {
   const auth = () => {
-    onSubmit(email, password)
-    // setEmail('')
-    // setPassword('')
+    if (email && password) {
+      return onSubmit({ email, password })
+    }
+    Toast.show('Email and Password are required.', Toast.LONG)
+  }
+  const renderButton = () => {
+    if (loading) {
+      return <Spinner size="large" />
+    }
+    return <Button title={buttonText} onButtonPress={auth} />
+  }
+  const renderError = () => {
+    if (error) {
+      return Alert.alert('Authentication Error.', error, [
+        {
+          text: 'Cancel',
+          onPress: () => resetError(),
+          style: 'cancel'
+        },
+        { text: 'OK', onPress: () => resetError() }
+      ])
+    }
+  }
+  const renderForgotPassword = () => {
+    return (
+      <TouchableOpacity onPress={() => onForgotPasswordPress()}>
+        <Text style={styles.forgotPassword}>Forgot Password?</Text>
+      </TouchableOpacity>
+    )
   }
   return (
     <View style={styles.backgroundStyle}>
@@ -34,37 +75,32 @@ export default function Auth({
           placeholderText="Email"
           autoCapitalize="none"
           inputValue={email}
-          onChangeText={setEmail}
+          onChangeText={value => emailChanged(value)}
         />
         <Input
           placeholderText="Password"
           autoCapitalize="none"
           inputValue={password}
-          onChangeText={setPassword}
+          onChangeText={value => passwordChanged(value)}
           secureTextEntry
         />
+        {renderButton()}
+        {buttonText === 'SIGN IN' ? renderForgotPassword() : null}
+        {renderError()}
         <View style={styles.dividerView}>
           <Divider style={styles.divider} />
           <Text style={styles.dividerText}>OR</Text>
           <Divider style={styles.divider} />
         </View>
-        <Button title={buttonText} onButtonPress={auth} />
         <View style={styles.signUpOptions}>
-          <TouchableOpacity
-            onPress={() =>
-              onGoogleButtonPress()
-                .then(() => console.log('Signed in with Google!'))
-                .catch(error => {
-                  console.log(error.message)
-                })
-            }>
+          <TouchableOpacity onPress={() => onGoogleButtonPress()}>
             <Image source={google} />
           </TouchableOpacity>
         </View>
-        <View style={styles.signInView}>
-          <Text style={styles.signInText}>{text}</Text>
+        <View style={styles.actionView}>
+          <Text style={styles.actionDescription}>{text}</Text>
           <TouchableOpacity onPress={() => navigator()}>
-            <Text style={styles.signIn}>{actionText}</Text>
+            <Text style={styles.actionText}>{actionText}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -73,11 +109,7 @@ export default function Auth({
 }
 
 const styles = StyleSheet.create({
-  backgroundStyle: {
-    flex: 1,
-    backgroundColor: '#20232A',
-    flexDirection: 'column'
-  },
+  backgroundStyle: { ...backgroundStyle },
   backgroundView: {
     marginHorizontal: 36,
     flex: 1
@@ -117,6 +149,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center'
   },
+  forgotPassword: {
+    color: '#EEE',
+    marginTop: 16,
+    textAlign: 'right'
+  },
   dividerView: {
     marginTop: 20,
     flexDirection: 'row',
@@ -138,20 +175,33 @@ const styles = StyleSheet.create({
     marginTop: 20,
     justifyContent: 'space-evenly'
   },
-  signInView: {
+  actionView: {
     flexDirection: 'row',
     alignContent: 'center',
     justifyContent: 'center',
-    marginVertical: 100
+    position: 'absolute',
+    bottom: 16,
+    alignSelf: 'center'
   },
-  signInText: {
+  actionDescription: {
     color: '#EEE',
     fontSize: 16,
     fontFamily: 'Poppins-Regular'
   },
-  signIn: {
+  actionText: {
     color: '#FF2052',
     fontSize: 16,
     fontFamily: 'Poppins-SemiBold'
   }
 })
+
+const mapStateToProps = ({ auth }) => {
+  const { email, password, error, loading } = auth
+  return { email, password, error, loading }
+}
+
+export default connect(mapStateToProps, {
+  emailChanged,
+  passwordChanged,
+  resetError
+})(Auth)

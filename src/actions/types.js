@@ -1,0 +1,13 @@
+export const EMAIL_CHANGED = 'email_changed'
+export const PASSWORD_CHANGED = 'password_changed'
+export const LOGIN_USER_SUCCESS = 'login_user_success'
+export const LOGIN_USER_FAIL = 'login_user_fail'
+export const LOGIN_USER = 'login_user'
+export const RESET_ERROR = 'reset_error'
+
+export const USER_UPDATE = 'user_update'
+export const RESET_USER_DETAILS = 'reset_user_details'
+export const UPDATE_USER = 'update_user'
+export const ADD_USER = 'add_user'
+export const USER_FETCH_SUCCESS = 'user_fetch_success'
+export const USER_FETCH_FAIL = 'user_fetch_fail'

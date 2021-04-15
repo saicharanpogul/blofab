@@ -10,13 +10,14 @@ const Input = ({
 }) => {
   return (
     <TextInput
+      key={placeholderText}
       style={styles.input}
       placeholder={placeholderText}
       placeholderTextColor="#c4c4c4"
       autoCapitalize={autoCapitalize}
       autoCorrect={false}
       value={inputValue}
-      onChangeText={value => onChangeText(value)}
+      onChangeText={onChangeText}
       {...rest}
     />
   )
@@ -27,9 +28,9 @@ const styles = StyleSheet.create({
     height: 48,
     backgroundColor: '#4D4F55',
     borderRadius: 10,
-    textAlign: 'center',
-    marginTop: 10,
-    color: '#fff'
+    marginTop: 16,
+    color: '#fff',
+    paddingStart: 20
   }
 })
 

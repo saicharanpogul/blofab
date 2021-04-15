@@ -1,6 +1,10 @@
 import { combineReducers } from 'redux'
-import { User } from './User'
+import Auth from './Auth'
+import User from './User'
+import UserData from './UserData'
 
 export default combineReducers({
-  user: User
+  auth: Auth,
+  user: User,
+  userData: UserData
 })
