@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView, StatusBar, StyleSheet, View } from 'react-native'
-import { SignUp, SignIn, ForgotPassword, UserDetails } from './src/screens'
+import {
+  SignUp,
+  SignIn,
+  ForgotPassword,
+  UserDetails,
+  HealthForm,
+  DonationConfirmation,
+  HistoryDetails
+} from './src/screens'
 import { NavigationContainer } from '@react-navigation/native'
 import { enableScreens } from 'react-native-screens'
 import { createNativeStackNavigator } from 'react-native-screens/native-stack'
@@ -83,6 +91,12 @@ const App = () => {
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Home" component={BottomTabs} />
             <Stack.Screen name="UserDetails" component={UserDetails} />
+            <Stack.Screen name="HealthForm" component={HealthForm} />
+            <Stack.Screen
+              name="DonationConfirmation"
+              component={DonationConfirmation}
+            />
+            <Stack.Screen name="HistoryDetails" component={HistoryDetails} />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaView>

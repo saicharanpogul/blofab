@@ -7,8 +7,7 @@ import {
   TouchableOpacity,
   Alert
 } from 'react-native'
-import welcome from '../assets/images/welcome.png'
-import google from '../assets/images/google.png'
+import { Welcome, Google } from '../assets/images/'
 import { Button, Input, Spinner } from '../components/common/'
 import { backgroundStyle } from '../components/Styles'
 import { Divider } from 'react-native-paper'
@@ -67,7 +66,7 @@ const Auth = ({
   }
   return (
     <View style={styles.backgroundStyle}>
-      <Image style={styles.image} source={welcome} />
+      <Image style={styles.image} source={Welcome} />
       <View style={styles.backgroundView}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.subTitle}>{subTitle}</Text>
@@ -76,6 +75,8 @@ const Auth = ({
           autoCapitalize="none"
           inputValue={email}
           onChangeText={value => emailChanged(value)}
+          label="Email"
+          defaultValue=""
         />
         <Input
           placeholderText="Password"
@@ -83,6 +84,8 @@ const Auth = ({
           inputValue={password}
           onChangeText={value => passwordChanged(value)}
           secureTextEntry
+          label="Password"
+          defaultValue=""
         />
         {renderButton()}
         {buttonText === 'SIGN IN' ? renderForgotPassword() : null}
@@ -94,7 +97,7 @@ const Auth = ({
         </View>
         <View style={styles.signUpOptions}>
           <TouchableOpacity onPress={() => onGoogleButtonPress()}>
-            <Image source={google} />
+            <Image style={{ width: 40, height: 40 }} source={Google} />
           </TouchableOpacity>
         </View>
         <View style={styles.actionView}>
@@ -114,7 +117,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 36,
     flex: 1
   },
-  image: { width: '100%' },
+  image: {
+    width: '100%',
+    height: 232,
+    resizeMode: 'contain'
+  },
   title: {
     color: '#eee',
     fontSize: 36,

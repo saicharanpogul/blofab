@@ -1,13 +1,13 @@
-import google from './google.png'
-import welcome from './welcome.png'
-import profileBackground from './profileBackground.png'
-import defaultProfileBackground from './defaultProfileBackground.png'
-import defaultProfile from './defaultProfile.png'
+import Google from './Google.png'
+import Welcome from './Welcome.png'
+import ProfileBackground from './ProfileBackground.png'
+import DefaultProfileBackground from './DefaultProfileBackground.png'
+import DefaultProfile from './DefaultProfile.png'
 
 export {
-  google,
-  welcome,
-  profileBackground,
-  defaultProfileBackground,
-  defaultProfile
+  Google,
+  Welcome,
+  ProfileBackground,
+  DefaultProfileBackground,
+  DefaultProfile
 }

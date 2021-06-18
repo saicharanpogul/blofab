@@ -1,4 +1,4 @@
-import { USER_FETCH_FAIL, USER_FETCH_SUCCESS } from '../actions/types'
+import { USER_FETCH_FAILURE, USER_FETCH_SUCCESS } from '../actions/types'
 
 const INITIAL_STATE = {
   userID: '',
@@ -21,7 +21,7 @@ export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case USER_FETCH_SUCCESS:
       return action.payload
-    case USER_FETCH_FAIL:
+    case USER_FETCH_FAILURE:
       return { ...INITIAL_STATE }
     default:
       return state

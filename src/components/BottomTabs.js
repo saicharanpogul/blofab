@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image } from 'react-native'
+import { Image, StyleSheet } from 'react-native'
 import { Home, Donation, History, Profile } from '../screens'
 import {
   HomeIcon,
@@ -21,7 +21,8 @@ const BottomTabs = () => {
       tabBarOptions={{
         style: {
           backgroundColor: '#000',
-          height: 56
+          height: 56,
+          borderTopColor: '#000'
         },
         activeTintColor: '#FF2052'
       }}>
@@ -31,7 +32,10 @@ const BottomTabs = () => {
         options={() => ({
           tabBarIcon: ({ focused }) => {
             return (
-              <Image source={focused ? HomeActiveIcon : HomeIcon} width="30" />
+              <Image
+                source={focused ? HomeActiveIcon : HomeIcon}
+                style={styles.icons}
+              />
             )
           }
         })}
@@ -44,7 +48,7 @@ const BottomTabs = () => {
             return (
               <Image
                 source={focused ? DonationActiveIcon : DonationIcon}
-                width="30"
+                style={styles.icons}
               />
             )
           }
@@ -58,7 +62,7 @@ const BottomTabs = () => {
             return (
               <Image
                 source={focused ? HistoryActiveIcon : HistoryIcon}
-                width="30"
+                style={styles.icons}
               />
             )
           }
@@ -72,7 +76,7 @@ const BottomTabs = () => {
             return (
               <Image
                 source={focused ? ProfileActiveIcon : ProfileIcon}
-                width="30"
+                style={styles.icons}
               />
             )
           }
@@ -83,3 +87,10 @@ const BottomTabs = () => {
 }
 
 export default BottomTabs
+
+const styles = StyleSheet.create({
+  icons: {
+    width: 30,
+    height: 30
+  }
+})

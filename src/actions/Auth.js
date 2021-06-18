@@ -3,7 +3,7 @@ import {
   EMAIL_CHANGED,
   PASSWORD_CHANGED,
   LOGIN_USER_SUCCESS,
-  LOGIN_USER_FAIL,
+  LOGIN_USER_FAILURE,
   LOGIN_USER,
   RESET_ERROR
 } from './types'
@@ -37,7 +37,7 @@ export const signUpUser = ({ email, password }) => {
         console.log(error)
         if (error.code === 'auth/email-already-in-use') {
           dispatch({
-            type: LOGIN_USER_FAIL,
+            type: LOGIN_USER_FAILURE,
             payload: 'That email address is already in use!'
           })
           console.log('That email address is already in use!')
@@ -45,13 +45,13 @@ export const signUpUser = ({ email, password }) => {
 
         if (error.code === 'auth/invalid-email') {
           dispatch({
-            type: LOGIN_USER_FAIL,
+            type: LOGIN_USER_FAILURE,
             payload: 'That email address is invalid!'
           })
           console.log('That email address is invalid!')
         }
         dispatch({
-          type: LOGIN_USER_FAIL,
+          type: LOGIN_USER_FAILURE,
           payload: error.code.slice(5)
         })
         console.error(error.message)
@@ -70,7 +70,7 @@ export const signInUser = ({ email, password }) => {
       })
       .catch(error => {
         dispatch({
-          type: LOGIN_USER_FAIL,
+          type: LOGIN_USER_FAILURE,
           payload: error.code.slice(5)
         })
         console.log(error.message)
@@ -95,12 +95,13 @@ export const googleSignIn = () => {
     auth()
       .signInWithCredential(googleCredential)
       .then(user => {
+        console.log(user.user)
         dispatch({ type: LOGIN_USER_SUCCESS, payload: user })
         console.log('User signed in with Google.')
       })
       .catch(error => {
         dispatch({
-          type: LOGIN_USER_FAIL,
+          type: LOGIN_USER_FAILURE,
           payload: 'Something went wrong!'
         })
         console.log(error.message)

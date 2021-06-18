@@ -2,7 +2,7 @@ import {
   EMAIL_CHANGED,
   PASSWORD_CHANGED,
   LOGIN_USER_SUCCESS,
-  LOGIN_USER_FAIL,
+  LOGIN_USER_FAILURE,
   LOGIN_USER,
   RESET_ERROR
 } from '../actions/types'
@@ -23,7 +23,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, password: action.payload, error: '' }
     case LOGIN_USER_SUCCESS:
       return { ...state, ...INITIAL_STATE, currentUser: action.payload }
-    case LOGIN_USER_FAIL:
+    case LOGIN_USER_FAILURE:
       return {
         ...state,
         error: action.payload,

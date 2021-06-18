@@ -10,9 +10,9 @@ import {
 } from 'react-native'
 import { backgroundStyle } from '../components/Styles'
 import {
-  profileBackground,
-  defaultProfile,
-  defaultProfileBackground
+  ProfileBackground,
+  DefaultProfile,
+  DefaultProfileBackground
 } from '../assets/images'
 import {
   EditIcon,
@@ -28,7 +28,8 @@ import {
   EducationIcon,
   OccupationIcon,
   PhoneIcon,
-  LocationIcon
+  LocationIcon,
+  AgeIcon
 } from '../assets/icons'
 import { Chip } from '../components/common'
 import { connect } from 'react-redux'
@@ -42,6 +43,7 @@ const Profile = ({
   navigation,
   userGet,
   userID,
+  username,
   bloodGroup,
   firstName,
   lastName,
@@ -54,13 +56,15 @@ const Profile = ({
   weight,
   education,
   occupation,
-  maritalStatus
+  maritalStatus,
+  profileImageUrl,
+  isNewUser
 }) => {
   const [refreshing, setRefreshing] = useState(false)
   useEffect(() => {
     userGet()
-  })
-  const onRefresh = React.useCallback(() => {
+  }, [refreshing, userGet])
+  const onRefresh = useCallback(() => {
     setRefreshing(true)
     wait(2000).then(() => setRefreshing(false))
   }, [])
@@ -73,12 +77,27 @@ const Profile = ({
       return OtherIcon
     }
   }
+  const renderAccountName = () => {
+    if (!firstName && !lastName) {
+      return (
+        <View style={styles.accountName}>
+          <Text style={styles.name}>{username}</Text>
+        </View>
+      )
+    }
+    return (
+      <View style={styles.accountName}>
+        <Text style={styles.name}>{firstName ? firstName : ''}</Text>
+        <Text style={styles.name}>{` ${lastName ? lastName : ''}`}</Text>
+      </View>
+    )
+  }
   const renderChips = () => {
     if (!firstName && !lastName) {
       return (
         <View style={styles.noData}>
           <Chip style={styles.idChip} title={userID} icon={IdIcon} />
-          <Text style={styles.no}>Please update your data!</Text>
+          <Text style={styles.no}>Please update your profile!</Text>
         </View>
       )
     }
@@ -91,6 +110,7 @@ const Profile = ({
         <Chip title={gender} icon={renderGenderIcon()} />
         <Chip title={weight} icon={WeightIcon} />
         <Chip title={dateOfBirth} icon={CalendarIcon} />
+        <Chip title={age} icon={AgeIcon} />
         <Chip title={maritalStatus} icon={MaritalStatusIcon} />
         <Chip title={education} icon={EducationIcon} />
         <Chip title={occupation} icon={OccupationIcon} />
@@ -105,24 +125,42 @@ const Profile = ({
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }>
       <View>
-        <Image style={styles.profileBackground} source={profileBackground} />
+        <Image style={styles.profileBackground} source={ProfileBackground} />
         <TouchableOpacity
           style={styles.edit}
-          onPress={() => navigation.navigate('UserDetails')}>
+          onPress={() =>
+            navigation.navigate('UserDetails', {
+              bloodGroup,
+              firstName,
+              lastName,
+              careOf,
+              address,
+              dateOfBirth,
+              age,
+              contactNumber,
+              gender,
+              weight,
+              education,
+              occupation,
+              maritalStatus,
+              profileImageUrl,
+              isNewUser
+            })
+          }>
           <Image style={styles.editIcon} source={EditIcon} />
         </TouchableOpacity>
         <View style={styles.profile}>
           <Image
             style={styles.defaultProfileBackground}
-            source={defaultProfileBackground}
+            source={DefaultProfileBackground}
           />
-          <Image style={styles.defaultProfile} source={defaultProfile} />
+          <Image
+            style={styles.defaultProfile}
+            source={profileImageUrl ? { uri: profileImageUrl } : DefaultProfile}
+          />
         </View>
       </View>
-      <View style={styles.accountName}>
-        <Text style={styles.name}>{firstName}</Text>
-        <Text style={styles.name}>{` ${lastName}`}</Text>
-      </View>
+      {renderAccountName()}
       {renderChips()}
     </ScrollView>
   )
@@ -131,6 +169,7 @@ const Profile = ({
 const mapStateToProps = ({ userData }) => {
   const {
     userID,
+    username,
     bloodGroup,
     firstName,
     lastName,
@@ -143,10 +182,13 @@ const mapStateToProps = ({ userData }) => {
     weight,
     education,
     occupation,
-    maritalStatus
+    maritalStatus,
+    profileImageUrl,
+    isNewUser
   } = userData
   return {
     userID,
+    username,
     bloodGroup,
     firstName,
     lastName,
@@ -159,7 +201,9 @@ const mapStateToProps = ({ userData }) => {
     weight,
     education,
     occupation,
-    maritalStatus
+    maritalStatus,
+    profileImageUrl,
+    isNewUser
   }
 }
 

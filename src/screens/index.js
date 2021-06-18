@@ -6,6 +6,9 @@ import History from './History'
 import Profile from './Profile'
 import ForgotPassword from './ForgotPassword'
 import UserDetails from './UserDetails'
+import HealthForm from './HealthForm'
+import DonationConfirmation from './DonationConfirmation'
+import HistoryDetails from './HistoryDetails'
 
 export {
   SignUp,
@@ -15,5 +18,8 @@ export {
   History,
   Profile,
   ForgotPassword,
-  UserDetails
+  UserDetails,
+  HealthForm,
+  DonationConfirmation,
+  HistoryDetails
 }
