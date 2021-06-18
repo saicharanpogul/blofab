@@ -1,41 +1,16 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import Auth from '../components/Auth'
-import auth from '@react-native-firebase/auth'
-import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import { signInUser, googleSignIn } from '../actions'
+import { connect } from 'react-redux'
 
-export default function SignIn({ navigation }) {
-  const onSignIn = (email, password) => {
-    console.log(password)
-    auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(() => {
-        console.log('User signed in')
-      })
-      .catch(error => {
-        console.log(error.message)
-      })
+const SignIn = ({ navigation, signInUser, googleSignIn }) => {
+  const onSignIn = ({ email, password }) => {
+    signInUser({ email, password })
   }
-  GoogleSignin.configure({
-    webClientId:
-      '429265696578-gp0msk38sdkrr87ot0tnms9oi3g8krhb.apps.googleusercontent.com'
-  })
-  const onGoogleButtonPress = async () => {
-    // Get the users ID token
-    const { idToken } = await GoogleSignin.signIn()
 
-    // Create a Google credential with the token
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken)
-
-    // Sign-in the user with the credential
-    auth()
-      .signInWithCredential(googleCredential)
-      .then(() => {
-        console.log('User signed in.')
-      })
-      .catch(error => {
-        console.log(error.message)
-      })
+  const onGoogleButtonPress = () => {
+    googleSignIn()
   }
   return (
     <Auth
@@ -47,8 +22,11 @@ export default function SignIn({ navigation }) {
       navigator={() => navigation.navigate('SignUp')}
       onSubmit={onSignIn}
       onGoogleButtonPress={onGoogleButtonPress}
+      onForgotPasswordPress={() => navigation.navigate('ForgotPassword')}
     />
   )
 }
 
 const styles = StyleSheet.create({})
+
+export default connect(null, { signInUser, googleSignIn })(SignIn)
